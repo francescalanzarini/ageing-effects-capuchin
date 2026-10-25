@@ -4,13 +4,13 @@ function plot_sigmoidfit_mod(xx, yy, coefit, relvalue, width, rho, eta, ...
                              nfA, nfB, forcedAtab, forcedBtab, table1mod, ipair, pair_names)
 
 % --- Create figure if it does not exist ---
-if ipair == 1  
+if ipair == 1  % only once for the first pair
     if isempty(findobj('Type','figure'))
         figure;
     end
 end
 
-% pairs are AB, BC, AC
+% Force pairs to be AB, BC, AC
 pair_order = {'AB','BC','AC'};
 pair_name = pair_order{ipair};
 
@@ -26,7 +26,7 @@ if isempty(xx) || isempty(yy)
 end
 
 % --- Plot fitted sigmoid ---
-x = min(xx)-log(2)/2 : 0.05 : max(xx)+log(2)/2;
+x = min(xx)-log(2)/2 : 0.05 : max(xx)+log(2)/2;  % domain
 y_choicefit = normcdf(x,coefit(1),coefit(2));
 plot(x,y_choicefit,'b-','LineWidth',2);
 
