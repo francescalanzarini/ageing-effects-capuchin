@@ -28,7 +28,7 @@ for imon = 1:numel(monkeys)
     mnk    = mnks{imon};
 
     % Directory with session scripts
-    dir_path = fullfile('...\', monkey);
+    dir_path = fullfile('Data\', monkey);
     addpath(dir_path)
 
     % Load session list table
