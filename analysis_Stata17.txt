@@ -1,0 +1,9 @@
+To compare capuchins’ transitivity between T1 and T2, in Experiment 1 we implemented a random-effect logistic regression model with category (Inconsistent or Transitive) as dependent variable and time of the study as factor: 
+
+xtlogit cat i.year, re (cat: 1=transitive, 0=inconsistent; year: 1=T2, 0=T1)
+
+In Experiment 2, we implemented a random-effect logistic regression model with category (Inconsistent or Transitive) as dependent variable and time of the study and stimulus type (food or token) as factors; the significance of interaction effects was tested using the Wald test, non-significant interactions were dropped from the model and the analysis was run again. In both models, the identity of the subject was included as a random effect: 
+
+CAT: xtlogit cat i.item i.year i.item#i.year, re (cat: 1=transitive, 0=inconsistent; year: 1=T2, 0=T1; item: 1=food, 0=token)
+
+We implemented both models in Stata 17. 
