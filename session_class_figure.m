@@ -7,12 +7,13 @@
 % The classification of each session is in the column session_class of
 % session_tot.xlsx (Inconsistent = ExtremeX0 equal to 1, see README).
 %
-% Input  : session_tot.xlsx (folder Data; add it to the MATLAB path)
+% Input  : Data/session_tot.csv (start MATLAB in the folder that contains Data;
+%           the scripts must be on the MATLAB path)
 % Output : Fig2A.pdf, Fig3A.pdf, Fig3C.pdf
 %          Fig2A_source_data.csv, Fig3A_source_data.csv, Fig3C_source_data.csv
 
 %% Load data
-session_tot = readtable("session_tot.xlsx");
+session_tot = readtable(fullfile('Data', 'session_tot.csv'));
 
 %% Panels and plot parameters
 panels = struct( ...

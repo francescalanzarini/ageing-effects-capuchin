@@ -6,13 +6,14 @@
 % session number at T1 and T2. The data selection is the same as in
 % longitudinal_eta.m.
 %
-% Input  : session_tot.xlsx (folder Data; add it to the MATLAB path)
+% Input  : Data/session_tot.csv (start MATLAB in the folder that contains Data;
+%           the scripts must be on the MATLAB path)
 % Output : Fig4_eta_T1_vs_T2.pdf   (figure)
 %          Fig4_source_data.csv    (data plotted in the figure)
 % Requires: filter_paired_sessions.m
 
 %% Load data
-session_tot = readtable("session_tot.xlsx");
+session_tot = readtable(fullfile('Data', 'session_tot.csv'));
 
 %% Select comparisons
 % Exclude extreme comparisons (rho > maximum quantity ratio offered)

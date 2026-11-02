@@ -1,5 +1,5 @@
 %% Load data
-session_tot = readtable("session_tot.xlsx");
+session_tot = readtable(fullfile('Data', 'session_tot.csv'));   % start MATLAB in the folder that contains Data
 
 %% Filter out extreme comparisons (rho <= max(qY/qX))
 session_AB = session_tot(session_tot.AB_rho <= session_tot.AB_ratio_max, :);
@@ -25,7 +25,7 @@ for i = 1:numel(comparisons)
 
     % loop across experimental contexts
     for ex = ["tra","ftr","ttr"]
-        sub = tbl(tbl.expr == ex, :);
+        sub = tbl(string(tbl.expr) == ex, :);
 
         % find sessions present at both T1 and T2
         sess_T1 = sub.session(sub.T == 1);

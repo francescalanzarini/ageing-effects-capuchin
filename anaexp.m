@@ -1,4 +1,8 @@
 %% anaexp: main analysis for capuchin behavioral data
+%
+% Setup: start MATLAB in the folder that contains the folder Data (Zenodo record: its
+% root folder, with the scripts in the folder Scripts). All paths are relative to it.
+if isfolder('Scripts'), addpath('Scripts'); end
 
 makestats  = 1;
 makefigs   = 1;
@@ -28,11 +32,11 @@ for imon = 1:numel(monkeys)
     mnk    = mnks{imon};
 
     % Directory with session scripts
-    dir_path = fullfile('Data\', monkey);
+    dir_path = fullfile('Data', monkey);
     addpath(dir_path)
 
     % Load session list table
-    sessions_table = load(['sessionlist_', mnk, '.mat']);
+    sessions_table = load(fullfile('Data', ['sessionlist_', mnk, '.mat']));
     fn = fieldnames(sessions_table);
     sessions_table = sessions_table.(fn{1}); % get the table
     sessions_table = sessions_table(strcmp(sessions_table.expr_code, expr), :);
