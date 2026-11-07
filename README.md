@@ -2,7 +2,7 @@
 
 Analysis code for: Lanzarini F, Gastaldi S, Padoa-Schioppa C, Visalberghi E, Addessi E. *Ageing impairs economic choices in tufted capuchin monkeys*. 
 
-Data: https://doi.org/10.5281/zenodo.23619148
+Data: https://doi.org/10.5281/zenodo.23266143
 
 ## Summary
 
@@ -38,20 +38,20 @@ All scripts are in the repository root.
 | `filter_paired_sessions.m` | Keeps only the sessions that are present at both time points (`T == 1` and `T == 2`), for each monkey and experiment. |
 | `longitudinal_eta.m` | **Longitudinal analysis.** Compares `eta` between T1 and T2 with a paired Wilcoxon signed-rank test. |
 | `longitudinal_eta_figure.m` | **Figure 4.** Scatter plot of `eta` at T2 against `eta` at T1 for all paired comparisons (same data selection as `longitudinal_eta.m`). Saves `Fig4_eta_T1_vs_T2.pdf` and `Fig4_source_data.csv`. |
-| `session_class_figure.m` | **Figures 2A, 3A and 3C.** Bar charts of the percentage of Inconsistent and Transitive sessions at T1 and T2, from `session_tot.xlsx`. Saves `Fig2A.pdf`, `Fig3A.pdf`, `Fig3C.pdf` and the corresponding `Fig*_source_data.csv`. |
+| `session_class_figure.m` | **Figures 2A, 3A and 3C.** Bar charts of the percentage of Inconsistent and Transitive sessions at T1 and T2, from `session_tot.csv`. Saves `Fig2A.pdf`, `Fig3A.pdf`, `Fig3C.pdf` and the corresponding `Fig*_source_data.csv`. |
 | `analysis_Stata17.txt` | .txt file reporting analysis done with Stata17 and their relative code line and explanation |
 
 ### Data folder layout
 
-The `Data` folder can be downloaded from the Zenodo repository: https://doi.org/10.5281/zenodo.23619148
-The `Data` folder contains the session lists, the table used for the longitudinal analysis, and one subfolder per monkey with the session scripts:
+The `Data` folder can be downloaded from the Zenodo repository: https://doi.org/10.5281/zenodo.23266143
+The `Data` folder contains the session lists, the table used for the longitudinal analysis, and one subfolder per monkey with the session scripts (`.m`) and the same sessions in CSV format:
 
 ```
 Data/
 ├── sessionlist_cog.mat ... sessionlist_vir.mat   % one session list (table) per monkey, 10 files
-├── sessionlist_cog.mat ... sessionlist_vir.csv   % same session list table in CSV format
-├── session_tot.xlsx                              % input of longitudinal_eta.m
-├── session_tot.csv                               % same table in CSV format
+├── sessionlist_cog.csv ... sessionlist_vir.csv   % same session list tables in CSV format
+├── session_tot.csv                               % input of longitudinal_eta.m (reference version)
+├── session_tot.xlsx                              % same table in Excel format
 ├── Cognac/
 │   ├── cog<date><n>_tra.m                        % one session script per session
 │   ├── cog<date><n>_tra.csv                      % same session in CSV format
@@ -78,11 +78,11 @@ Monkeys (full name / code): Cognac (`cog`), Gal (`gal`), Paprica (`pap`), Pepe (
 
 ## How to reproduce the analyses
 
-1. **Get the code and the data.** Clone this repository and download the data from https://doi.org/10.5281/zenodo.23619148. Arrange the data as shown above.
-2. **Set the paths.** In `anaexp.m`, replace the placeholder `'Data/'` in `dir_path = fullfile('Data/', monkey)` with the full path of your `Data` folder. Add the `Data` folder to the MATLAB path (the `sessionlist_<mnk>.mat` files are in its root), and start MATLAB in the repository folder (or add it to the path).
+1. **Get the code and the data.** Clone this repository (it contains only the scripts) and download the `Data` folder from the Zenodo record (https://doi.org/10.5281/zenodo.23266143); place it inside the cloned repository folder, as shown above.
+2. **Set the working folder.** Start MATLAB in the folder that contains the folder `Data`; the paths in the scripts are relative to it (e.g. `fullfile('Data', monkey)`) and no path has to be edited. This is the repository folder, with the downloaded `Data` folder placed inside it.
 3. **Run the single-session analysis, once per experiment.** In `anaexp.m`, uncomment one `experiment` / `expr` pair at a time (`tra`, `ftr`, `ttr`) and run `anaexp`. Keep `makefigs = 1`: the transitivity p-values are computed only when figures are produced. Set `printplots = 0` to skip the PDF export. Outputs are described below; summary files are written to the current working directory.
-4. **Longitudinal table.** The table used by the longitudinal analysis, `Data/session_tot.xlsx` (also provided as `session_tot.csv`), is **provided and was compiled manually** from the `summary_<expr>_all_sessions.csv` files produced in step 3 (see "Variables"). It can be used directly.
-5. **Run the longitudinal analysis.** Make `Data/session_tot.xlsx` available in the working directory (or add `Data` to the path) and run `longitudinal_eta`. It prints the p-value of the paired Wilcoxon signed-rank test and the median and mean differences of `eta` (T2 − T1). With the provided `session_tot.xlsx` this gives N = 54 paired comparisons, p = 0.038, a median difference of −0.79 and a mean difference of −1.15 (the values reported in the paper).
+4. **Longitudinal table.** The table used by the longitudinal analysis, `Data/session_tot.csv`, is provided; it was compiled from the `summary_<expr>_all_sessions.csv` files produced in step 3, with the additional variables described in "Variables" (`T`, `session`, `session_class`, `ratio_max`). It can be used directly. `session_tot.xlsx` is the same table in Excel format; `session_tot.csv` is the reference version (in the `.xlsx` file the undefined `Rsq` values appear as `#NAME?`).
+5. **Run the longitudinal analysis.** Run `longitudinal_eta` (it reads `Data/session_tot.csv`). It prints the p-value of the paired Wilcoxon signed-rank test and the median and mean differences of `eta` (T2 − T1). With the provided `session_tot.csv` this gives N = 54 paired comparisons, p = 0.038, a median difference of −0.79 and a mean difference of −1.15 (the values reported in the paper).
 6. **Make Figure 4.** Run `longitudinal_eta_figure`. It saves the figure (`Fig4_eta_T1_vs_T2.pdf`) and the plotted data (`Fig4_source_data.csv`).
 7. **Make Figures 2A, 3A and 3C.** Run `session_class_figure`. It saves the three figures (`Fig2A.pdf`, `Fig3A.pdf`, `Fig3C.pdf`) and their source data (`Fig2A_source_data.csv`, `Fig3A_source_data.csv`, `Fig3C_source_data.csv`).
 
@@ -126,7 +126,7 @@ Three panels (AB, BC, AC), each showing the fitted cumulative normal (blue line)
 
 ### Longitudinal analysis (`longitudinal_eta`)
 
-1. Load `session_tot.xlsx`.
+1. Load `session_tot.csv`.
 2. For each pair, exclude extreme comparisons (`rho > ratio_max`).
 3. Keep only sessions present at both T1 and T2 (`filter_paired_sessions`).
 4. Pool `eta` across pairs and experiments, aligning T1 and T2 by session.
@@ -152,18 +152,41 @@ Each session script `<mnk><date><n>_<expr>.m` defines a structure `parset`:
 
 ### Trial matrix (`data`, columns of `dataset_<k>`)
 
-At least 7 columns; only the first 7 are used.
+Seven or eight columns, one row per trial, as in the header of the session scripts: `[trial#, loc-a*(#a), loc-b*(#b), loc-c*(#c), loc-choice, latency 1, doubts, latency 2]`. Column 8 is present only in some sessions; only the first seven columns are passed to the analysis (the CSV version of the session files is described below).
 
 | Column | Variable | Description |
 |--------|----------|-------------|
-| 1 | `trial_index` | Not used by the analysis. |
-| 2 | `qA` | Offered quantity of good A, as number of items (food pieces or tokens); 0 if A is not offered. The sign means the left/right position of the offer. Its sign is used to recode the choice (column 5). |
-| 3 | `qB` | Offered quantity of good B (number of items); 0 if B is not offered. |
-| 4 | `qC` | Offered quantity of good C (number of items); 0 if C is not offered. |
-| 5 | `choice` | Choice code (±1); multiplied by the sign of the first good's quantity |
-| 6 | `latency` | (not used by the analysis). Choice latency; values > 0 are valid. Unit: seconds |
-| 7 | `secondthought` | (not used by the analysis) Second-thought indicator |
+| 1 | `trial` | Trial number (decimal numbers for extra trials). Not used by the analysis. |
+| 2 | `loc_qA` | Offered quantity of good A, as number of items (food pieces or tokens), multiplied by the location of the offer: `-1` = left of the experimenter (right of the subject), `+1` = right of the experimenter (left of the subject); `0` if A is not offered. Its sign is used to recode the choice (column 5). |
+| 3 | `loc_qB` | Same as column 2, for good B. |
+| 4 | `loc_qC` | Same as column 2, for good C. |
+| 5 | `loc_choice` | Location of the chosen offer, coded as the location in columns 2–4 (`-1` or `+1`). The analysis multiplies it by the sign of the first good of the pair: `+1` = first good chosen, `-1` = second good chosen. |
+| 6 | `latency_1` | (not used by the analysis) Choice latency, in seconds; values <= 0 (e.g. `-1`) = missing. |
+| 7 | `doubts` | (not used by the analysis) `0` = none; `+1` = the monkey tries to grab both foods; `+2` = the monkey appears very undecided. |
+| 8 | `latency_2` | (not used by the analysis) Second measure of the choice latency, in seconds; only in some sessions. |
 
+### Session files in CSV format (`<mnk><date><n>_<expr>.csv`)
+
+Each session script has a CSV version, in the same folder and with the same name, with one row per trial and 19 columns (the trials of all the datasets of the session, in the same order). These files contain the same data as the session scripts, plus the identification of the session. Trials commented out in the session scripts (lines starting with `%`) are not analysed and are not in the CSV files.
+
+| Column | Description |
+|--------|-------------|
+| `monkey`, `mkn` | Monkey name and 3-letter code. |
+| `expr` | Experiment code: `tra`, `ftr` or `ttr`. |
+| `T` | Time point, derived from the year of the session: 2002 or 2007 (previously published studies) = `1`; 2017 (present study) = `2`. |
+| `date` | Session date, in the format YYYY-MM-DD (in the session scripts and in `sessionDate`: YYMMDD). |
+| `session` | **Session of the day** (`parset.session`; `sessionNum` in the session lists). It is **not** the `session` variable of `session_tot`, which is the index used to pair sessions between T1 and T2. |
+| `dataset` | Index k of the trial matrix `parset.dataset_<k>` that contains the trial (the trial matrices of a session are concatenated in the analysis). |
+| `experimenters` | Experimenter(s) of the session; several names are separated by `;`. "(blind)" marks the experimenter who was blind to the offers. |
+| `good_A`, `good_B`, `good_C` | Names of the three goods of the session (A = most preferred, C = least preferred). |
+| `trial` | Trial number. Extra trials have a decimal number (e.g. 24.2). |
+| `loc_qA`, `loc_qB`, `loc_qC` | Offered quantity of good A, B, C **and its location**. The absolute value is the number of items offered (food pieces or tokens); `0` means that the good is not offered in the trial. The sign is the location of the offer: `-1` = left of the experimenter (right of the subject), `+1` = right of the experimenter (left of the subject). Two goods are offered in each trial, at opposite locations. |
+| `loc_choice` | Location of the chosen offer, with the same coding as the sign of the quantities (`-1` or `+1`): the chosen good is the one offered at that location. |
+| `latency_1` | Choice latency, in seconds. `-1` = missing. |
+| `doubts` | Doubts of the monkey in the trial: `0` = none; `+1` = the monkey tries to grab both foods; `+2` = the monkey appears very undecided. |
+| `latency_2` | Second measure of the choice latency, in seconds, recorded only in some sessions in T1 (empty otherwise; `-1` = missing).|
+
+Example: `loc_qA = +1, loc_qB = -2, loc_qC = 0, loc_choice = -1` is a trial with 1 item of A on the right of the experimenter and 2 items of B on the left; the monkey chose the offer on the left (2 items of B).
 
 ### Session list: `sessionlist_<mnk>.mat`
 
@@ -210,9 +233,17 @@ The pairs in this table are reported as fitted (AB, BC, AC); the A>B>C relabelli
 
 `figures_<expr>_<monkey>_session_<file>.pdf`: one figure per session, saved in the monkey's folder.
 
-### `session_tot.xlsx` / `session_tot.csv` (input of `longitudinal_eta`)
+### `session_tot.csv` (input of `longitudinal_eta`)
 
-Table of the fitted parameters of every session (118 rows: 61 sessions at T1 and 57 at T2; 22 columns), compiled manually from the `summary_<expr>_all_sessions.csv` files produced by `anaexp`. The same table is provided in Excel and CSV format.
+Table of the fitted parameters of every session (118 rows: 61 sessions at T1 and 57 at T2; 22 columns), compiled from the `summary_<expr>_all_sessions.csv` files produced by `anaexp`. **`session_tot.csv` is the reference version**; `session_tot.xlsx` is the same table in Excel format, where the undefined `Rsq` values (`-Inf`) appear as `#NAME?`.
+
+**How `session_tot` was built.** The files `summary_<expr>_all_sessions.csv` produced by `anaexp` contain, for each session, the fitted parameters of the three comparisons (`AB_x0`, ..., `AC_Rsq`), `Monkey` (name), `Session` (date and session of the day) and `ExtremeX0`. They do not contain `T`, `session`, `session_class` and `ratio_max`, which were added when compiling `session_tot`:
+
+- `mkn`: 3-letter code of the monkey (from the monkey name).
+- `T`: derived from the date of the session: sessions of 2002 (Experiment 1) and 2007 (Experiment 2) are `1`; sessions of 2017 are `2`.
+- `session`: ordinal number (1–5) of the session within each monkey, experiment and time point, in chronological order. The session with the same number at T1 and T2 (same monkey, same experiment) are paired in the longitudinal analysis.
+- `session_class`: `Inconsistent` if `ExtremeX0 = 1`, `Transitive` otherwise; in no `Transitive` session the transitivity test (z-test, p-value in the title of the session figure) was significant.
+- `AB_ratio_max`, `BC_ratio_max`, `AC_ratio_max`: maximum quantity ratio offered for the comparison obtained from each session file.
 
 **Pair labels.** A, B and C are the three goods of a triplet (foods or tokens), ranked from the most preferred (A) to the least preferred (C). `AB`, `BC` and `AC` are the three binary comparisons. For a comparison between goods X and Y (e.g. `BC`: X = B, Y = C), `qX` and `qY` are the numbers of items offered.
 
@@ -228,24 +259,23 @@ Table of the fitted parameters of every session (118 rows: 61 sessions at T1 and
 |--------|------|-------------|
 | `monkey`, `mkn` | – | Monkey name and 3-letter code. |
 | `T` | – | Time point: `1` = previously published study (2002 or 2007), `2` = present study (2017). |
-| `session` | – | Session number (1–5), used to match a session at T1 with the corresponding session at T2 for the same monkey and experiment (it is not the date); shared across monkeys. |
+| `session` | – | Ordinal number (1–5) of the session within monkey, experiment and time point, used to pair a session at T1 with the corresponding session at T2; shared across monkeys. It is **not** the session of the day (`session` in the CSV session files, `sessionNum` in the session lists). |
 | `expr` | – | Experiment/condition: `tra` = Experiment 1 (food), `ftr` = Experiment 2 food condition, `ttr` = Experiment 2 token condition. |
 | `AB_x0`, `BC_x0`, `AC_x0` | log(quantity ratio), dimensionless | Mean of the fitted cumulative normal (log indifference point) for each comparison. |
 | `AB_rho`, `BC_rho`, `AC_rho` | quantity ratio, dimensionless | Indifference point, `exp(x0)`, in units of Y per unit of X. |
 | `AB_eta`, `BC_eta`, `AC_eta` | dimensionless | Slope of the choice function, `1/w` (lower values = noisier choices). |
-| `AB_Rsq`, `BC_Rsq`, `AC_Rsq` | dimensionless | Adjusted R² of the fit; `-Inf` when the fit has no residual degrees of freedom (shown as `#NAME?` in Excel). |
+| `AB_Rsq`, `BC_Rsq`, `AC_Rsq` | dimensionless | Adjusted R² of the fit; `-Inf` when the fit has no residual degrees of freedom (shown as `#NAME?` in the Excel file). |
 | `ExtremeX0` | 0/1 | `1` if `abs(x0) >= log(20)` for at least one of the three comparisons, `0` otherwise. |
 | `AB_ratio_max`, `BC_ratio_max`, `AC_ratio_max` | quantity ratio, dimensionless | Maximum quantity ratio qY/qX offered for the comparison. Comparisons with `rho > ratio_max` are excluded from the longitudinal analysis. |
-| `session_class` | – | `Inconsistent` or `Transitive`. `Inconsistent`: at least one comparison is not fitted by a monotonic normal sigmoid, identified by `ExtremeX0 = 1` (61 sessions). `Transitive`: `ExtremeX0 = 0` and the identity `x0_AB + x0_BC = x0_AC` is not rejected by the z-test (57 sessions). No session was non-transitive. |
+| `session_class` | – | `Inconsistent` or `Transitive` (see above). `Inconsistent`: at least one comparison is not fitted by a monotonic normal sigmoid, identified by `ExtremeX0 = 1` (61 sessions). `Transitive`: `ExtremeX0 = 0` and the identity `x0_AB + x0_BC = x0_AC` is not rejected by the z-test (57 sessions). No session was non-transitive. |
 
 Identical fitted values in different sessions are expected when the choice patterns are identical: the fit depends only on the choice proportions and on the offered quantity ratios, which are the same across sessions and monkeys. This happens for deterministic, step-like patterns (`Rsq = 1`) and for degenerate fits with extreme `x0` (undefined `Rsq`).
 
 
 ## Notes and known issues
 
-- In `longitudinal_eta.m`, T1 and T2 values are aligned by sorting on `session` only. Since session numbers repeat across monkeys, this is correct only if the rows have the same monkey order at T1 and T2. With the provided `session_tot.xlsx` the result is identical to the one obtained by sorting on `{'mkn','session'}`; the latter would make the alignment independent of the row order.
-- `Rsq` equals `-Inf` when the fit has no residual degrees of freedom, and Excel shows `-Inf` as `#NAME?`. In `session_tot.csv` this appears in 55 `Rsq` cells; in `session_tot.xlsx` they are read as missing values. `Rsq` is not used by the analysis. The same CSV also shows one `AB_rho` value rounded to `4.27E+240` (a failed fit, excluded by the `ratio_max` filter).
-- `analyze_ftr` declares a fourth input argument `session`, which is not passed by the wrappers; the value is overwritten by `readset.m`.
+- In `longitudinal_eta.m`, T1 and T2 values are aligned by sorting on `session` only. Since session numbers repeat across monkeys, this is correct only if the rows have the same monkey order at T1 and T2. With the provided `session_tot.csv` the result is identical to the one obtained by sorting on `{'mkn','session'}`; the latter would make the alignment independent of the row order.
+- `Rsq` equals `-Inf` when the fit has no residual degrees of freedom. In `session_tot.csv` (reference version) it is reported as `-Inf` (55 cells); Excel shows `-Inf` as `#NAME?` in `session_tot.xlsx`. `Rsq` is not used by the analysis.
 - `plot_sigmoidfit_mod` receives `pair_names` but ignores it and uses its own fixed order `{'AB','BC','AC'}`.
 - `makeanalysis_fch` also returns `nstar` and `Rsq` (error of the step-function fit); they are not used by the rest of the analysis.
 - The random-effects logistic regressions comparing T1 and T2 (Stata 17) are reported as a .txt file in the repository.
@@ -259,7 +289,7 @@ This project is licensed under the MIT License; see the [LICENSE](LICENSE) file 
 If you use this code, please cite:
 
 > Lanzarini F, Gastaldi S, Padoa-Schioppa C, Visalberghi E, Addessi E. Ageing impairs economic choices in tufted capuchin monkeys. 
-Data: https://doi.org/10.5281/zenodo.23619148
+Data: https://doi.org/10.5281/zenodo.23266143
 
 
 ## Contact
